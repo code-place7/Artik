@@ -4,6 +4,7 @@ import { connectDB } from "./config/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import { functions, inngest } from "./config/inngest.js";
 import { serve } from "inngest/express";
+import chatRoutes from "./routes/chat.route.js";
 
 const app = express();
 
@@ -11,11 +12,12 @@ app.use(clerkMiddleware()); //we can check user is authenticated or not using re
 app.use(express.json());
 const PORT = process.env.PORT || 5001;
 
-app.use("/api/inngest", serve({ client: inngest, functions }));
-
 app.get("/", (req, res) => {
   res.send("Hello, World! 777");
 });
+
+app.use("/api/inngest", serve({ client: inngest, functions }));
+app.use("/api/chat", chatRoutes);
 
 const startServer = async () => {
   try {

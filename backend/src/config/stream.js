@@ -24,3 +24,13 @@ export const deleteStreamUser = async (userId) => {
     console.error("Error deleting Stream user:", error);
   }
 };
+
+export const generateStreamToken = (userId) => {
+  try {
+    const userIdString = userId.toString();
+    return streamClient.createToken(userIdString);
+  } catch (error) {
+    console.log("Error generating Stream token:", error);
+    return null;
+  }
+};
