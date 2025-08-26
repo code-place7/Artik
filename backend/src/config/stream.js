@@ -3,7 +3,7 @@ import "dotenv/config";
 
 const streamClient = StreamChat.getInstance(
   process.env.STREAM_API_KEY,
-  process.env.STREAM_API_SECRET
+  process.env.STREAM_SECRET_KEY
 );
 
 export const upsertStreamUser = async (userData) => {
