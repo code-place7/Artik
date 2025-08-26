@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "dev": "node --watch src/server.js"
+    "dev": "set NODE_OPTIONS=--import ./instrument.mjs&& node --watch src/server.js",
+    "start": "set NODE_OPTIONS=--import ./instrument.mjs&& node src/server.js"
   },
   "keywords": [],
   "author": "",
