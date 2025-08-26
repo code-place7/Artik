@@ -1,4 +1,4 @@
-import "../instrument.js";
+import "../instrument.mjs";
 import express from "express";
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
