@@ -4,29 +4,19 @@ import "../styles/auth.css";
 const AuthPage = () => {
   return (
     <div className="auth-container">
-      <div className="glowing-orbs">
-        <div className="orb orb-1"></div>
-        <div className="orb orb-2"></div>
-        <div className="orb orb-3"></div>
-      </div>
-
       <div className="auth-left">
         <div className="auth-hero">
           <div className="brand-container">
             <img src="/logo.png" alt="artik" className="brand-logo" />
             <span className="brand-name">Artik</span>
           </div>
-          <h1 className="hero-title">
-            <span className="gradient-text">Where Creativity</span>
-            <br />
-            Meets Innovation ✨
-          </h1>
+          <h1 className="hero-title">Where Work Happens 💫</h1>
           <p className="hero-subtitle">
             Connect with Expert Video Editors and Transform Your Content into
-            <span className="highlight"> Digital Masterpieces</span>
+            Digital Masterpieces
           </p>
 
-          <div className="features-grid">
+          <div className="features-list">
             <div className="feature-item">
               <span className="feature-icon">💬</span>
               <span>Real-time Collaboration</span>
