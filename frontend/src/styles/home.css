@@ -1,0 +1,305 @@
+/* Minimal, consistent with auth.css visuals (glass, gradients, same components) */
+
+:root {
+  --bg-1: #1a0b2e;
+  --bg-2: #0f3460;
+  --glass: rgba(255, 255, 255, 0.03);
+  --accent1: #7209b7;
+  --accent2: #06b6d4;
+  --muted: #cbd5e1;
+  --card-radius: 18px;
+  --gap: 1rem;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* page root */
+.home-root {
+  min-height: 100vh;
+  background: linear-gradient(125deg, var(--bg-1), var(--bg-2));
+  color: #fff;
+  font-family: "Segoe UI", Roboto, Inter, system-ui, -apple-system, Arial;
+  padding-bottom: 3rem;
+  padding-top: 12px; /* small padding instead of relying on hero margin */
+}
+
+/* HERO (simple two-column) */
+.hero-wrap {
+  display: grid;
+  grid-template-columns: 1fr 520px;
+  gap: 2rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+}
+
+.hero-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(116, 58, 213, 0.12);
+  padding: 2rem;
+  border-radius: var(--card-radius);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+.brand-name {
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  font-size: 1rem;
+}
+
+.hero-title {
+  font-size: 2rem;
+  margin: 0.25rem 0 0.6rem;
+  line-height: 1.05;
+  font-weight: 800;
+}
+.hero-accent {
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-desc {
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+/* actions */
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: #fff;
+  padding: 0.9rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 20px 40px rgba(74, 21, 75, 0.12);
+}
+.cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #e6f7fb;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+}
+
+/* features list (reuse auth.css style) */
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+.feature-item {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.8rem;
+  border-radius: 12px;
+  background: rgba(116, 58, 213, 0.06);
+  border: 1px solid rgba(116, 58, 213, 0.12);
+  transition: all 0.2s;
+}
+.feature-item:hover {
+  transform: translateX(6px);
+  box-shadow: 0 12px 30px rgba(74, 21, 75, 0.08);
+}
+.feature-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+}
+
+/* hero media (right) */
+.hero-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+.media-visual {
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+  position: relative;
+}
+.media-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-height: 70vh;
+}
+.media-cta-wrap {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  pointer-events: none;
+}
+.media-cta {
+  pointer-events: auto;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: #fff;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* showcase (videos) */
+.showcase-section {
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  padding: 0 1rem;
+}
+.section-title {
+  color: #fff;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.video-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #05060a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+}
+.video-el {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.video-controls {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+}
+.play-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* CTA section */
+.cta-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+}
+.cta-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  padding: 1.2rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+.cta-heading {
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+.cta-text {
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+/* responsive */
+@media (max-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .hero-wrap {
+    grid-template-columns: 1fr 420px;
+    gap: 1.25rem;
+    padding: 0 1rem;
+  }
+}
+@media (max-width: 768px) {
+  .hero-wrap {
+    grid-template-columns: 1fr;
+  }
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .media-image {
+    max-height: 40vh;
+  }
+}
+@media (max-width: 420px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+  .brand-name {
+    display: none;
+  }
+}

@@ -7,6 +7,8 @@ import {
 import { Navigate, Route, Routes } from "react-router";
 import HomePage from "./pages/HomePage";
 import AuthPage from "./pages/AuthPage";
+import Hirepage from "./pages/Hirepage";
+import AboutPage from "./pages/AboutPage";
 
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
       <SignedIn>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/hire" element={<Hirepage />} />
+          <Route path="/learn-more" element={<AboutPage />} />
           <Route path="/auth" element={<Navigate to={"/"} replace />} />
         </Routes>
       </SignedIn>
