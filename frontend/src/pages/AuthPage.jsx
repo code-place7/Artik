@@ -1,5 +1,6 @@
 import { SignInButton } from "@clerk/clerk-react";
 import "../styles/auth.css";
+import toast from "react-hot-toast";
 
 const AuthPage = () => {
   return (
@@ -37,7 +38,12 @@ const AuthPage = () => {
           </div>
 
           <SignInButton mode="modal">
-            <button className="cta-button">
+            <button
+              className="cta-button"
+              onClick={() => {
+                toast.success("Redirecting to sign in...");
+              }}
+            >
               <span className="button-text">Get Started</span>
               <span className="button-arrow">→</span>
             </button>
