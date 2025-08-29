@@ -16,13 +16,6 @@ export default function App() {
 
   return (
     <>
-      <button
-        onClick={() => {
-          throw new Error("Test Sentry Error ON My frontend also");
-        }}
-      >
-        Throw Error
-      </button>
       <SignedIn>
         <SentryRoutes>
           <Route path="/" element={<HomePage />} />
