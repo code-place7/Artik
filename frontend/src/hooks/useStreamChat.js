@@ -18,7 +18,7 @@ export const useStreamChat = () => {
   const {
     data: streamTokendata,
     isLoading: tokenLoading,
-    error: tokenError,
+    error,
   } = useQuery({
     queryKey: ["streamToken", user?.id], // an identifier for the query
 
@@ -32,7 +32,7 @@ export const useStreamChat = () => {
     if (!streamTokendata?.token || !user?.id || !STREAM_API_KEY) return;
 
     const client = StreamChat.getInstance(STREAM_API_KEY); // basically we are defining client with our stream Api kEY so user can start chatting
-    let cancelled = false;
+    let cancelled = false; // we are declaring this so useffect so it does not call many time after  setting the client
 
     const connect = async () => {
       try {
@@ -50,7 +50,7 @@ export const useStreamChat = () => {
           streamTokendata.token
         );
         if (!cancelled) {
-          setChatClient(client); //finally we are setting the client
+          setChatClient(client); //as you can see below after setting the client defining the ancelled to true so that it does not call the useEffect again
         }
       } catch (error) {
         console.log("Error connecting to stream", error);
@@ -73,5 +73,5 @@ export const useStreamChat = () => {
     };
   }, [streamTokendata?.token, user?.id]); // we are adding streamTokendata?.token and user?.id as dependencies because if any of them changes we want to re run the effect
 
-  return { chatClient, tokenLoading, tokenError };
+  return { chatClient, tokenLoading, error };
 };
