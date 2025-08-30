@@ -23,7 +23,7 @@ export const useStreamChat = () => {
     queryKey: ["streamToken", user?.id], // an identifier for the query
 
     // we only want to run it if user is authenticated
-    queryFn: () => getStreamToken(user.id),
+    queryFn: () => getStreamToken,
     enabled: !!user?.id, // this will take the object and convert it into boolean value
   });
 
