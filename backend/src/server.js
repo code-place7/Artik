@@ -7,11 +7,13 @@ import { functions, inngest } from "./config/inngest.js";
 import { serve } from "inngest/express";
 import chatRoutes from "./routes/chat.route.js";
 import * as Sentry from "@sentry/node";
+import cors from "cors";
 
 const app = express();
 
 app.use(clerkMiddleware()); //we can check user is authenticated or not using req.auth()
 app.use(express.json());
+app.use(cors());
 const PORT = process.env.PORT || 5001;
 
 app.get("/debug-sentry", (req, res) => {
