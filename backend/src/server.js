@@ -13,7 +13,7 @@ const app = express();
 
 app.use(clerkMiddleware()); //we can check user is authenticated or not using req.auth()
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 const PORT = process.env.PORT || 5001;
 
 app.get("/debug-sentry", (req, res) => {
