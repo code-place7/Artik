@@ -61,7 +61,7 @@ export default function HomePage() {
 
           <div className="hero-actions">
             <Link to="/hire" className="cta-button">
-              Hire an Editor
+              Talk to SomeOne{" "}
             </Link>
             <Link to="/learn-more" className="cta-ghost">
               Learn More
