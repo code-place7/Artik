@@ -1,41 +1,47 @@
 import { useState, useEffect } from "react";
 import { StreamChat } from "stream-chat";
 import { useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getStreamToken } from "../lib/api";
 import * as Sentry from "@sentry/react";
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
-
-// this hook is used to connect the current user to the Stream Chat API
-// so that users can see each other's messages, send messages to each other, get realtime updates, etc.
-// it also handles  the disconnection when the user leaves the page
+const client = StreamChat.getInstance(STREAM_API_KEY); // singleton
 
 export const useStreamChat = () => {
   const { user } = useUser();
   const [chatClient, setChatClient] = useState(null);
+  const queryClient = useQueryClient();
 
-  // fetch stream token using react-query
+  // initial token fetch with React Query
   const {
     data: tokenData,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["streamToken"],
+    queryKey: ["streamToken", user?.id],
     queryFn: getStreamToken,
-    enabled: !!user?.id, // this will take the object and convert it to a boolean
+    enabled: !!user?.id,
+    staleTime: 1000 * 60 * 55, // token valid ~1h
+    cacheTime: 1000 * 60 * 60,
+    refetchOnWindowFocus: false, // no spam calls on tab switch
   });
 
-  // init stream chat client
-  // init stream chat client
   useEffect(() => {
-    if (!tokenData?.token || !user?.id || !STREAM_API_KEY) return;
-
-    const client = StreamChat.getInstance(STREAM_API_KEY);
-    let cancelled = false;
+    if (!user?.id || !STREAM_API_KEY) return;
+    if (!tokenData?.token && !tokenData?.streamToken) return;
 
     const connect = async () => {
       try {
+        // already connected as this user
+        if (client.userID === user.id) {
+          console.log("♻️ Already connected as", user.id);
+          setChatClient(client);
+          return;
+        }
+
+        console.log("🔑 Connecting to Stream with token provider...");
+
         await client.connectUser(
           {
             id: user.id,
@@ -46,32 +52,41 @@ export const useStreamChat = () => {
               user.id,
             image: user.imageUrl ?? undefined,
           },
-          tokenData.token
+          async () => {
+            console.log("🔄 Stream requested a new token...");
+            // use Query Client to avoid duplicate calls
+            const fresh = await queryClient.fetchQuery({
+              queryKey: ["streamToken", user.id],
+              queryFn: getStreamToken,
+            });
+            console.log("📥 Provided fresh Stream token", fresh);
+            return fresh.token || fresh.streamToken;
+          }
         );
-        if (!cancelled) {
-          setChatClient(client);
-        }
-      } catch (error) {
-        console.log("Error connecting to stream", error);
-        Sentry.captureException(error, {
+
+        setChatClient(client);
+        console.log("✅ Connected to Stream as", user.id);
+      } catch (err) {
+        console.error("❌ Error connecting to Stream", err);
+        Sentry.captureException(err, {
           tags: { component: "useStreamChat" },
-          extra: {
-            context: "stream_chat_connection",
-            userId: user?.id,
-            streamApiKey: STREAM_API_KEY ? "present" : "missing",
-          },
+          extra: { userId: user?.id },
         });
       }
     };
 
     connect();
+  }, [user?.id, tokenData?.token, tokenData?.streamToken, queryClient]);
 
-    // cleanup
+  // disconnect only on unmount
+  useEffect(() => {
     return () => {
-      cancelled = true;
-      client.disconnectUser();
+      if (client.userID) {
+        client.disconnectUser();
+        console.log("👋 Stream chat client disconnected");
+      }
     };
-  }, [tokenData?.token, user?.id]);
+  }, []);
 
   return { chatClient, isLoading, error };
 };

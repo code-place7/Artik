@@ -8,7 +8,6 @@ const AuthContext = createContext({});
 export default function AuthProvider({ children }) {
   const { getToken } = useAuth();
 
-  // every single time before the application run a request, this interceptor will be called and it will include your token in the request headers
   useEffect(() => {
     // setup axios interceptor
 
@@ -16,7 +15,6 @@ export default function AuthProvider({ children }) {
       async (config) => {
         try {
           const token = await getToken();
-          //if there is a token meaning we are authenticated and we are adding token to the headers and just by doing this backend will be able to verify the token and authorize  the user to access the protected routes
           if (token) config.headers.Authorization = `Bearer ${token}`;
         } catch (error) {
           if (

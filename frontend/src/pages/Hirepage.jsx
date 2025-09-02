@@ -1,9 +1,8 @@
+import { UserButton } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useStreamChat } from "../hooks/useStreamChat";
 import PageLoader from "../components/PageLoader";
-import "../styles/stream-chat-theme.css";
-import { HashIcon, PlusIcon, UsersIcon } from "lucide-react";
 
 import {
   Chat,
@@ -14,8 +13,12 @@ import {
   Thread,
   Window,
 } from "stream-chat-react";
-import { UserButton } from "@clerk/clerk-react";
+
+import "../styles/stream-chat-theme.css";
+import { HashIcon, PlusIcon, UsersIcon } from "lucide-react";
 import CreateChannelModal from "../components/CreateChannelModal";
+import CustomChannelPreview from "../components/CustomChannelPreview";
+import UsersList from "../components/UsersList";
 import CustomChannelHeader from "../components/CustomChannelHeader";
 
 const Hirepage = () => {
@@ -38,26 +41,26 @@ const Hirepage = () => {
 
   // todo: handle this with a better component
   if (error) return <p>Something went wrong...</p>;
-  if (isLoading || !chatClient) return <PageLoader />;
+  if (isLoading || !chatClient || !chatClient.userID) return <PageLoader />;
 
   return (
     <div className="chat-wrapper">
       <Chat client={chatClient}>
         <div className="chat-container">
-          {/*LEFT SIDEBAR */}
+          {/* LEFT SIDEBAR */}
           <div className="str-chat__channel-list">
             <div className="team-channel-list">
               {/* HEADER */}
               <div className="team-channel-list__header gap-4">
                 <div className="brand-container">
                   <img src="/logo.png" alt="Logo" className="brand-logo" />
-                  <span className="brand-name">Artik</span>
+                  <span className="brand-name">Slap</span>
                 </div>
                 <div className="user-button-wrapper">
                   <UserButton />
                 </div>
               </div>
-              {/* CHANNEL LIST */}
+              {/* CHANNELS LIST */}
               <div className="team-channel-list__content">
                 <div className="create-channel-section">
                   <button
@@ -68,10 +71,61 @@ const Hirepage = () => {
                     <span>Create Channel</span>
                   </button>
                 </div>
+
+                {/* CHANNEL LIST */}
+                {/*This ensures <ChannelList> won’t mount until the client is really connected. */}
+                {chatClient.userID && (
+                  <ChannelList
+                    filters={{ members: { $in: [chatClient.userID] } }} // before chatClient?.user?.id is undefined until the client is connected. Use chatClient.userID instead
+                    options={{ state: true, watch: true }}
+                    Preview={({ channel }) => (
+                      <CustomChannelPreview
+                        channel={channel}
+                        activeChannel={activeChannel}
+                        setActiveChannel={(channel) =>
+                          setSearchParams({ channel: channel.id })
+                        }
+                      />
+                    )}
+                    List={({ children, loading, error }) => (
+                      <div className="channel-sections">
+                        <div className="section-header">
+                          <div className="section-title">
+                            <HashIcon className="size-4" />
+                            <span>Channels</span>
+                          </div>
+                        </div>
+
+                        {/* todos: add better components here instead of just a simple text  */}
+                        {loading && (
+                          <div className="loading-message">
+                            Loading channels...
+                          </div>
+                        )}
+                        {error && (
+                          <div className="error-message">
+                            Error loading channels
+                          </div>
+                        )}
+
+                        <div className="channels-list">{children}</div>
+
+                        <div className="section-header direct-messages">
+                          <div className="section-title">
+                            <UsersIcon className="size-4" />
+                            <span>Direct Messages</span>
+                          </div>
+                        </div>
+                        <UsersList activeChannel={activeChannel} />
+                      </div>
+                    )}
+                  />
+                )}
               </div>
             </div>
           </div>
-          {/*Right Container */}
+
+          {/* RIGHT CONTAINER */}
           <div className="chat-main">
             <Channel channel={activeChannel}>
               <Window>
@@ -84,15 +138,12 @@ const Hirepage = () => {
             </Channel>
           </div>
         </div>
+
         {isCreateModalOpen && (
-          <CreateChannelModal
-            isOpen={isCreateModalOpen}
-            onClose={() => setActiveChannel(false)}
-          />
+          <CreateChannelModal onClose={() => setIsCreateModalOpen(false)} />
         )}
       </Chat>
     </div>
   );
 };
-
 export default Hirepage;
